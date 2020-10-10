@@ -29,11 +29,15 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_rightFront.configOpenloopRamp(0.5);
     m_rightRear.configOpenloopRamp(0.5);
 
-    m_leftFront.setInverted(true);
-    m_rightRear.setInverted(true);
+    // We were getting Sensor Out of Phase errors
+    // so we set all these to true.
+    m_leftFront.setSensorPhase(true);
+    m_leftRear.setSensorPhase(true);
+    m_rightFront.setSensorPhase(true);
+    m_rightRear.setSensorPhase(true);
 
     m_robotDrive = new MecanumDrive(m_leftFront, m_leftRear, m_rightFront, m_rightRear);
-    m_robotDrive.setDeadband(0.3);
+    m_robotDrive.setDeadband(0.02);
 
     m_stick = new Joystick(kJoystickChannel);
 
@@ -50,7 +54,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
     // System.out.println("X: " + x + " Y: " + y + " Z: " + z);
 
-    m_robotDrive.driveCartesian(m_stick.getY(), m_stick.getX(), m_stick.getZ());
+    m_robotDrive.driveCartesian(m_stick.getX(), -m_stick.getY(), m_stick.getZ());
   }
 
   public void stop() {
