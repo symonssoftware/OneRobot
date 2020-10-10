@@ -9,6 +9,8 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  *
  */
@@ -99,6 +101,7 @@ public class VisionProcessor extends SubsystemBase {
             m_inRange = false;
             m_drivebaseSubsystem.stop();
          }
+         */
 
         SmartDashboard.putBoolean("In Range",m_inRange);
         
@@ -107,7 +110,6 @@ public class VisionProcessor extends SubsystemBase {
         SmartDashboard.putNumber("Distance to Target (in)", m_distTargInNTE.getDouble(DEFAULT_TABLE_ENTRY_VALUE));
 
         SmartDashboard.putNumber("Horiz. Offset in (in)", m_horzOffInNTE.getDouble(DEFAULT_TABLE_ENTRY_VALUE));
-        */
     }
 
     // Put methods for controlling this subsystem
