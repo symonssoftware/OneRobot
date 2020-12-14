@@ -17,6 +17,17 @@ package frc.robot;
  */
 public final class Constants {
 	
+	public static final int DIO_0 = 0;
+	public static final int DIO_1 = 1;
+	public static final int DIO_2 = 2;
+	public static final int DIO_3 = 3;
+	public static final int DIO_4 = 4;
+	public static final int DIO_5 = 5;
+	public static final int DIO_6 = 6;
+	public static final int DIO_7 = 7;
+	public static final int DIO_8 = 8;
+	public static final int DIO_9 = 9;
+
 	public static final int PIGEON_IMU_CAN_ID = 62;
 
     public static final int RIGHT_FRONT_MOTOR_CAN_ID = 11;

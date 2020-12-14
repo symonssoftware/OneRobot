@@ -26,6 +26,8 @@ public class RobotContainer {
   private final static DrivebaseSubsystem m_drivebaseSubsystem = new DrivebaseSubsystem();
   private final static NavigationSubsystem m_navigationSubsystem = new NavigationSubsystem();
   private final static VisionProcessor m_visionProcessor = new VisionProcessor();
+  private final static ProximitySubsystem m_proximitySubsystem = new ProximitySubsystem();
+  private final static RotatingSensorSubsystem m_rotatingSensorSubsystem = new RotatingSensorSubsystem();
 
 // Robot Commands
 private final static MoveCameraBackwardCommand m_moveCameraBackwardCommand = new MoveCameraBackwardCommand(
@@ -115,4 +117,11 @@ private void configureShuffleboardBindings() {
     return m_visionProcessor;
   }
 
+  public static ProximitySubsystem getProximitySubsystem() {
+    return m_proximitySubsystem;
+  }
+  
+  public static RotatingSensorSubsystem getRotatingSensorSubsystem() {
+    return m_rotatingSensorSubsystem;
+  }
 }

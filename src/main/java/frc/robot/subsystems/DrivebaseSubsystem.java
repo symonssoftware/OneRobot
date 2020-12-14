@@ -13,9 +13,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
    */
 
   private WPI_TalonSRX m_rightFront = new WPI_TalonSRX(Constants.RIGHT_FRONT_MOTOR_CAN_ID);
-  private WPI_TalonSRX m_rightRear = new WPI_TalonSRX(Constants.RIGHT_REAR_MOTOR_CAN_ID);
+  private WPI_TalonSRX m_rightBack = new WPI_TalonSRX(Constants.RIGHT_REAR_MOTOR_CAN_ID);
   private WPI_TalonSRX m_leftFront = new WPI_TalonSRX(Constants.LEFT_FRONT_MOTOR_CAN_ID);
-  private WPI_TalonSRX m_leftRear = new WPI_TalonSRX(Constants.LEFT_REAR_MOTOR_CAN_ID);
+  private WPI_TalonSRX m_leftBack = new WPI_TalonSRX(Constants.LEFT_REAR_MOTOR_CAN_ID);
 
   private static final int kJoystickChannel = 0;
 
@@ -25,24 +25,39 @@ public class DrivebaseSubsystem extends SubsystemBase {
   public DrivebaseSubsystem() {
 
     m_leftFront.configOpenloopRamp(0.5);
-    m_leftRear.configOpenloopRamp(0.5);
+    m_leftBack.configOpenloopRamp(0.5);
     m_rightFront.configOpenloopRamp(0.5);
-    m_rightRear.configOpenloopRamp(0.5);
+    m_rightBack.configOpenloopRamp(0.5);
 
-    // We were getting Sensor Out of Phase errors
-    // so we set all these to true.
-    m_leftFront.setSensorPhase(true);
-    m_leftRear.setSensorPhase(true);
-    m_rightFront.setSensorPhase(true);
-    m_rightRear.setSensorPhase(true);
+    m_leftFront.setInverted(true);
+    m_leftBack.setInverted(false);
+    m_leftBack.follow(m_leftFront);
 
-    m_robotDrive = new MecanumDrive(m_leftFront, m_leftRear, m_rightFront, m_rightRear);
-    m_robotDrive.setDeadband(0.02);
+    m_rightFront.setInverted(false);
+    m_rightBack.setInverted(true);
+    m_rightBack.follow(m_rightFront);
+
+    m_robotDrive = new MecanumDrive(m_leftFront, m_leftBack, m_rightFront, m_rightBack);
 
     m_stick = new Joystick(kJoystickChannel);
 
     register();
   }
+
+  private double deadband(final double value) {
+		/* Upper deadband */
+		if (value >= 0.2) {
+			return value;
+		}
+
+		/* Lower deadband */
+		if (value <= -0.2) {
+			return value;
+		}
+
+		/* Inside deadband */
+		return 0.0;
+	}
 
   @Override
   public void periodic() {
@@ -54,50 +69,50 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
     // System.out.println("X: " + x + " Y: " + y + " Z: " + z);
 
-    m_robotDrive.driveCartesian(m_stick.getX(), -m_stick.getY(), m_stick.getZ());
+    m_robotDrive.driveCartesian(deadband(m_stick.getY()), deadband(m_stick.getX()), -deadband(m_stick.getZ()));
   }
 
   public void stop() {
       System.out.println("stop");
       m_leftFront.set(0);
-      m_leftRear.set(0);
+      m_leftBack.set(0);
       m_rightFront.set(0);
-      m_rightRear.set(0);
+      m_rightBack.set(0);
   }
 
   public void moveForward() {
     System.out.println("moveForward");
 
     m_leftFront.set(-Constants.VISION_MOTOR_SPEED);
-    m_leftRear.set(Constants.VISION_MOTOR_SPEED);
+    m_leftBack.set(Constants.VISION_MOTOR_SPEED);
     m_rightFront.set(-Constants.VISION_MOTOR_SPEED);
-    m_rightRear.set(Constants.VISION_MOTOR_SPEED);
+    m_rightBack.set(Constants.VISION_MOTOR_SPEED);
   }
 
   public void moveBackward() {
     System.out.println("moveBackward");
 
     m_leftFront.set(Constants.VISION_MOTOR_SPEED);
-    m_leftRear.set(-Constants.VISION_MOTOR_SPEED);
+    m_leftBack.set(-Constants.VISION_MOTOR_SPEED);
     m_rightFront.set(Constants.VISION_MOTOR_SPEED);
-    m_rightRear.set(-Constants.VISION_MOTOR_SPEED);
+    m_rightBack.set(-Constants.VISION_MOTOR_SPEED);
   }
 
   public void strafeRight() {
     System.out.println("strafeRight");
 
     m_leftFront.set(-Constants.VISION_MOTOR_SPEED);
-    m_leftRear.set(-Constants.VISION_MOTOR_SPEED);
+    m_leftBack.set(-Constants.VISION_MOTOR_SPEED);
     m_rightFront.set(Constants.VISION_MOTOR_SPEED);
-    m_rightRear.set(Constants.VISION_MOTOR_SPEED);
+    m_rightBack.set(Constants.VISION_MOTOR_SPEED);
   }
 
   public void strafeLeft() {
     System.out.println("strafeLeft");
 
     m_leftFront.set(Constants.VISION_MOTOR_SPEED);
-    m_leftRear.set(Constants.VISION_MOTOR_SPEED);
+    m_leftBack.set(Constants.VISION_MOTOR_SPEED);
     m_rightFront.set(-Constants.VISION_MOTOR_SPEED);
-    m_rightRear.set(-Constants.VISION_MOTOR_SPEED);
+    m_rightBack.set(-Constants.VISION_MOTOR_SPEED);
   }
 }
