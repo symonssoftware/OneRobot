@@ -38,4 +38,7 @@ public final class Constants {
 
 	public static final double VISION_TARGET_TOLERANCE_IN_INCHES = 1.0;
 	public static final double VISION_MOTOR_SPEED = .35;
+
+	//public static final int STEP_DELAY = 190000;
+	public static final int STEP_DELAY = 120000 ;
 }

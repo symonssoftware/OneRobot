@@ -10,6 +10,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PerpetualCommand;
+import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,24 +32,24 @@ public class RobotContainer {
   private final static ProximitySubsystem m_proximitySubsystem = new ProximitySubsystem();
   private final static RotatingSensorSubsystem m_rotatingSensorSubsystem = new RotatingSensorSubsystem();
 
-// Robot Commands
-private final static MoveCameraBackwardCommand m_moveCameraBackwardCommand = new MoveCameraBackwardCommand(
-  m_drivebaseSubsystem, m_visionProcessor);
-private final static MoveCameraForwardCommand m_moveCameraForwardCommand = new MoveCameraForwardCommand(m_drivebaseSubsystem, m_visionProcessor);
-private final static MoveCameraStrafeRightCommand m_moveCameraStrafeRightCommand = new MoveCameraStrafeRightCommand(
-  m_drivebaseSubsystem, m_visionProcessor);
-private final static MoveCameraStrafeLeftCommand m_moveCameraStrafeLeftCommand = new MoveCameraStrafeLeftCommand(
-  m_drivebaseSubsystem, m_visionProcessor);
-  private final static StopCameraMoveCommand m_stopCameraMoveCommand = new StopCameraMoveCommand(
-  m_drivebaseSubsystem);
-
+  // Robot Commands
+  private final static MoveCameraBackwardCommand m_moveCameraBackwardCommand = new MoveCameraBackwardCommand(
+      m_drivebaseSubsystem, m_visionProcessor);
+  private final static MoveCameraForwardCommand m_moveCameraForwardCommand = new MoveCameraForwardCommand(
+      m_drivebaseSubsystem, m_visionProcessor);
+  private final static MoveCameraStrafeRightCommand m_moveCameraStrafeRightCommand = new MoveCameraStrafeRightCommand(
+      m_drivebaseSubsystem, m_visionProcessor);
+  private final static MoveCameraStrafeLeftCommand m_moveCameraStrafeLeftCommand = new MoveCameraStrafeLeftCommand(
+      m_drivebaseSubsystem, m_visionProcessor);
+  private final static StopCameraMoveCommand m_stopCameraMoveCommand = new StopCameraMoveCommand(m_drivebaseSubsystem);
+ 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    configureShuffleboardBindings();
+    //configureShuffleboardBindings();
   }
 
   /**
@@ -56,6 +59,7 @@ private final static MoveCameraStrafeLeftCommand m_moveCameraStrafeLeftCommand =
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+  
   }
 
 // Use this method to define shuffleboard buttons or widgets
