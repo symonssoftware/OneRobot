@@ -1,15 +1,9 @@
 package frc.robot.utilities;
 
 import edu.wpi.first.wpilibj.SerialPort;
+import frc.robot.RobotContainer;
 
-public class SerialDataHandler {
-    public static final int SEARCHING_FOR_HEADER = 0;
-    public static final int SEARCHING_FOR_RANGE_DATA = 1;
-    public static final int SEARCHING_FOR_BEARING_DATA = 2;
-
-    private int m_state = SEARCHING_FOR_HEADER;
-    private int m_rangeData = 0;
-    private int m_bearingData = 0;
+public class SerialDataHandler implements Runnable {
 
     SerialPort m_port;
 
@@ -17,14 +11,6 @@ public class SerialDataHandler {
         m_port = new SerialPort(baudRate, serialPort, numBits, serialParity, stopBits);
         m_port.setTimeout(0.03);
         m_port.reset();
-    }
-
-    public int getSensorRangeData() {
-        return m_rangeData;
-    }
-
-    public int getSensorBearingData() {
-        return m_bearingData;
     }
 
     private int convertData(byte a, byte b) {
@@ -37,51 +23,33 @@ public class SerialDataHandler {
         return sensorData;
     }
 
-    public void readPort() {
-        m_rangeData = -1;
-        m_bearingData = -1;
+    @Override
+    public void run() {
 
-        m_port.setReadBufferSize(2);
-        byte[] byteArray = m_port.read(2);
+        while (true) {
+            m_port.setReadBufferSize(6);
+            byte[] byteArray = m_port.read(6);
 
-        if (byteArray.length == 2) {
+            if (byteArray.length == 6) {
 
-            byte upperbyte = byteArray[0]; 
-            byte lowerbyte = byteArray[1];
+                byte upperHeaderByte = byteArray[0];
+                byte lowerHeaderByte = byteArray[1];
 
-         System.out.println(String.format("byteA: %02X ", upperbyte));
-         System.out.println(String.format("byteB: %02X ", lowerbyte));
-
-            switch (m_state) {
-            case SEARCHING_FOR_HEADER:
-
-                if ((int) (Byte.toUnsignedInt(upperbyte)) == 0xff) {
-                    if ((int) (Byte.toUnsignedInt(lowerbyte)) == 0x01) {
-                        m_state = SEARCHING_FOR_RANGE_DATA;
-                    } else if ((int) (Byte.toUnsignedInt(lowerbyte)) == 0x02) {
-                        m_state = SEARCHING_FOR_BEARING_DATA;
-                    } else {
-                        // System.out.printlnln("Invalid ID");
-                    }
+                if (((int) (Byte.toUnsignedInt(upperHeaderByte)) == 0xff)
+                        && ((int) (Byte.toUnsignedInt(lowerHeaderByte)) == 0xfe)) {
+                    // Header is valid so get the data
+                    RobotContainer.getRotatingSensorSubsystem().setRange(convertData(byteArray[2], byteArray[3]));
+                    RobotContainer.getRotatingSensorSubsystem().setBearing(convertData(byteArray[4], byteArray[5]));
                 }
-                break;
-            case SEARCHING_FOR_RANGE_DATA:
-                m_rangeData = convertData(upperbyte, lowerbyte);
-                m_state = SEARCHING_FOR_HEADER;
-                // System.out.printlnln(String.format("byteA: %02X ", lowerbyte));
-                // System.out.printlnln(String.format("byteB: %02X ", upperbyte));
-
-                break;
-            case SEARCHING_FOR_BEARING_DATA:
-                m_bearingData = convertData(upperbyte, lowerbyte);
-                m_state = SEARCHING_FOR_HEADER;
-                break;
-            default:
-                // Do nothing
-                break;
+            } else {
+                // System.out.printlnln("Nothing on port");
             }
-        } else {
-            // System.out.printlnln("Nothing on port");
+
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

@@ -14,11 +14,15 @@ public class RotatingSensorSubsystem extends SubsystemBase {
 
     DigitalOutput m_sensorEnable = new DigitalOutput(Constants.DIO_2);
     SerialDataHandler m_serialDataHandler;
+    int m_range = -1;
+    int m_bearing = -1;
 
     public RotatingSensorSubsystem() {
        
         m_serialDataHandler = new SerialDataHandler(115200, SerialPort.Port.kMXP, 8, SerialPort.Parity.kNone,
-				 SerialPort.StopBits.kOne);
+                 SerialPort.StopBits.kOne);
+        Thread thread = new Thread(m_serialDataHandler);
+        thread.start();
 
         m_sensorEnable.set(false); // enables sensor box
     }
@@ -27,22 +31,18 @@ public class RotatingSensorSubsystem extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
 
-        m_serialDataHandler.readPort();
+        // System.out.println("Range: " + m_range);
+        SmartDashboard.putNumber("Range: ", m_range);
 
-        int range = m_serialDataHandler.getSensorRangeData();
-
-        if (range != -1)
-        {
-            System.out.println("Range: " + range);
-            SmartDashboard.putNumber("Range: ", range);
-        }
-
-        int bearing = m_serialDataHandler.getSensorBearingData();
-
-        if (bearing != -1)
-        {
-            System.out.println("Bearing: " + bearing);
-            SmartDashboard.putNumber("Bearing: ", bearing);
-        }
+        // System.out.println("Bearing: " + m_bearing);
+        SmartDashboard.putNumber("Bearing: ", m_bearing);
     } 
+
+    public void setRange(int range) {
+        m_range = range;
+    }
+
+    public void setBearing(int bearing) {
+        m_bearing = bearing;
+    }
 }
