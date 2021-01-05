@@ -8,9 +8,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class DrivebaseSubsystem extends SubsystemBase {
-  /**
-   * Creates a new ExampleSubsystem.
-   */
 
   private WPI_TalonSRX m_rightFront = new WPI_TalonSRX(Constants.RIGHT_FRONT_MOTOR_CAN_ID);
   private WPI_TalonSRX m_rightBack = new WPI_TalonSRX(Constants.RIGHT_REAR_MOTOR_CAN_ID);
@@ -29,19 +26,12 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_rightFront.configOpenloopRamp(0.5);
     m_rightBack.configOpenloopRamp(0.5);
 
-    m_leftFront.setInverted(true);
-    m_leftBack.setInverted(false);
     m_leftBack.follow(m_leftFront);
-
-    m_rightFront.setInverted(false);
-    m_rightBack.setInverted(true);
     m_rightBack.follow(m_rightFront);
 
     m_robotDrive = new MecanumDrive(m_leftFront, m_leftBack, m_rightFront, m_rightBack);
 
     m_stick = new Joystick(kJoystickChannel);
-
-    register();
   }
 
   private double deadband(final double value) {
@@ -69,9 +59,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
     // System.out.println("X: " + x + " Y: " + y + " Z: " + z);
 
-    //m_robotDrive.driveCartesian(deadband(m_stick.getY()), deadband(m_stick.getX()), -deadband(m_stick.getZ()));
+    m_robotDrive.driveCartesian(deadband(m_stick.getX()), -deadband(m_stick.getY()), deadband(m_stick.getZ()));
 
-    m_robotDrive.driveCartesian(0, 0, 0);
+    //m_robotDrive.driveCartesian(0, 0, 0);
   }
 
   public void stop() {
@@ -85,36 +75,36 @@ public class DrivebaseSubsystem extends SubsystemBase {
   public void moveForward() {
     System.out.println("moveForward");
 
-    m_leftFront.set(-Constants.VISION_MOTOR_SPEED);
+    m_leftFront.set(Constants.VISION_MOTOR_SPEED);
     m_leftBack.set(Constants.VISION_MOTOR_SPEED);
     m_rightFront.set(-Constants.VISION_MOTOR_SPEED);
-    m_rightBack.set(Constants.VISION_MOTOR_SPEED);
+    m_rightBack.set(-Constants.VISION_MOTOR_SPEED);
   }
 
   public void moveBackward() {
     System.out.println("moveBackward");
 
-    m_leftFront.set(Constants.VISION_MOTOR_SPEED);
+    m_leftFront.set(-Constants.VISION_MOTOR_SPEED);
     m_leftBack.set(-Constants.VISION_MOTOR_SPEED);
     m_rightFront.set(Constants.VISION_MOTOR_SPEED);
-    m_rightBack.set(-Constants.VISION_MOTOR_SPEED);
+    m_rightBack.set(Constants.VISION_MOTOR_SPEED);
   }
 
   public void strafeRight() {
     System.out.println("strafeRight");
 
-    m_leftFront.set(-Constants.VISION_MOTOR_SPEED);
+    m_leftFront.set(Constants.VISION_MOTOR_SPEED);
     m_leftBack.set(-Constants.VISION_MOTOR_SPEED);
-    m_rightFront.set(Constants.VISION_MOTOR_SPEED);
+    m_rightFront.set(-Constants.VISION_MOTOR_SPEED);
     m_rightBack.set(Constants.VISION_MOTOR_SPEED);
   }
 
   public void strafeLeft() {
     System.out.println("strafeLeft");
 
-    m_leftFront.set(Constants.VISION_MOTOR_SPEED);
+    m_leftFront.set(-Constants.VISION_MOTOR_SPEED);
     m_leftBack.set(Constants.VISION_MOTOR_SPEED);
-    m_rightFront.set(-Constants.VISION_MOTOR_SPEED);
+    m_rightFront.set(Constants.VISION_MOTOR_SPEED);
     m_rightBack.set(-Constants.VISION_MOTOR_SPEED);
   }
 
