@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class RotatingSensorSubsystem extends SubsystemBase {
 
-    DigitalOutput m_sensorEnable = new DigitalOutput(Constants.DIO_2);
+    DigitalOutput m_sensorEnable = new DigitalOutput(Constants.DIO_9);
     SerialDataHandler m_serialDataHandler;
     int m_range = -1;
     int m_bearing = -1;

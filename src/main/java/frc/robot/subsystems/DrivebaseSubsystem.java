@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,6 +21,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
   private Joystick m_stick;
 
   public DrivebaseSubsystem() {
+
+    DriverStation.getInstance().silenceJoystickConnectionWarning(true);
 
     m_leftFront.configOpenloopRamp(0.5);
     m_leftBack.configOpenloopRamp(0.5);
