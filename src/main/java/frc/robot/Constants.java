@@ -28,7 +28,7 @@ public final class Constants {
 	public static final int DIO_8 = 8;
 	public static final int DIO_9 = 9;
 
-	public static final int PIGEON_IMU_CAN_ID = 62;
+	public static final int PIGEON_IMU_CAN_ID = 61;
 
     public static final int RIGHT_FRONT_MOTOR_CAN_ID = 11;
 	public static final int RIGHT_REAR_MOTOR_CAN_ID = 12;
